@@ -49,9 +49,21 @@ const displaySelectedOption = function (section, selectBox, response) {
           ul.appendChild(liPopulation);
           ul.appendChild(liCountryName);
           section.appendChild(ul);
+          storeSelectionInStorage(country.name, country.population, country.capital);
       }
     });
   });
+}
+
+const storeSelectionInStorage = function(name, population, capital) {
+  var country = {
+    name: name,
+    population: population,
+    capital: capital
+  };
+
+  const JsonString = JSON.stringify(country);
+  localStorage.setItem('country', JsonString);
 }
 
 window.addEventListener('load', app);
