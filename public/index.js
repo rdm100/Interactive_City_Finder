@@ -1,19 +1,18 @@
-const app = function(){
-  const url = 'https://restcountries.eu/rest/v2/all';
-  const url2 = 'https://api.coinmarketcap.com/v2/ticker/';
-  makeRequest(url, requestComplete);
-  displaySelectedOption();
 
+
+const app = function(){
+
+  const url = 'https://restcountries.eu/rest/v2/all';
+  makeRequest(url, requestComplete);
   var glasgow = [55.8642, -4.2518];
   const zoom = 15;
-  lonLat = null;
-  const mainMap = new MapWrapper(glasgow, zoom);
+  mainMap = new MapWrapper(glasgow, zoom);
 }
 
 const makeRequest = function(url, callback) {
   const request = new XMLHttpRequest();
   request.open("GET", url);
-  request.addEventListener('load', callback);
+  request.addEventListener('load',callback);
   request.send();
 }
 
@@ -56,15 +55,10 @@ const displaySelectedOption = function (section, selectBox, response) {
           section.appendChild(ul);
           storeSelectionInStorage(country.name, country.population, country.capital);
           getLocationData(country.name);
-          // mainMap.moveMap(lonLat);
       }
     });
   });
 }
-
-
-
-
 
 const getLocationData = function(countryName) {
   url = 'https://api.teleport.org/api/cities/?search=' + countryName;
@@ -92,27 +86,9 @@ const makeSecondCall = function(url) {
 const locationData = function() {
   if (this.status !== 200) return;
     const response = JSON.parse(this.response);
-    lonLat = [response['location']['latlon']['latitude'],response['location']['latlon']['longitude']];
-    console.log(lonLat);
+    var lonLat = [response['location']['latlon']['latitude'],response['location']['latlon']['longitude']];
+    mainMap.moveMap(lonLat);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 const storeSelectionInStorage = function(name, population, capital) {
   var country = {
