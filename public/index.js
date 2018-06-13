@@ -3,6 +3,11 @@ const app = function(){
   const url2 = 'https://api.coinmarketcap.com/v2/ticker/';
   makeRequest(url, requestComplete);
   displaySelectedOption();
+
+  var glasgow = [55.8642, -4.2518];
+  const zoom = 15;
+  lonLat = null;
+  const mainMap = new MapWrapper(glasgow, zoom);
 }
 
 const makeRequest = function(url, callback) {
@@ -50,10 +55,64 @@ const displaySelectedOption = function (section, selectBox, response) {
           ul.appendChild(liCountryName);
           section.appendChild(ul);
           storeSelectionInStorage(country.name, country.population, country.capital);
+          getLocationData(country.name);
+          // mainMap.moveMap(lonLat);
       }
     });
   });
 }
+
+
+
+
+
+const getLocationData = function(countryName) {
+  url = 'https://api.teleport.org/api/cities/?search=' + countryName;
+  const requestTeleportCity = new XMLHttpRequest();
+  requestTeleportCity.open("GET", url);
+  requestTeleportCity.addEventListener('load', overallData);
+  requestTeleportCity.send();
+}
+
+const overallData = function() {
+  if (this.status !== 200) return;
+    const response = JSON.parse(this.response);
+    let url = response['_embedded']['city:search-results'][0]['_links']['city:item']['href'];
+    console.log(url);
+    makeSecondCall(url);
+}
+
+const makeSecondCall = function(url) {
+  const cityData = new XMLHttpRequest();
+  cityData.open("GET", url);
+  cityData.addEventListener('load', locationData);
+  cityData.send();
+}
+
+const locationData = function() {
+  if (this.status !== 200) return;
+    const response = JSON.parse(this.response);
+    lonLat = [response['location']['latlon']['latitude'],response['location']['latlon']['longitude']];
+    console.log(lonLat);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const storeSelectionInStorage = function(name, population, capital) {
   var country = {

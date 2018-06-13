@@ -13,25 +13,6 @@ const MapWrapper = function(location, zoom) {
   this.map.on('click', function(event) {
     this.drawPin(event.latlng);
   }.bind(this));
-
-  //-------------------------------------------------------------------------
-  // This function waits for the move to city button to be clicked then will
-  // move the map to Chicago.
-  const buttonCityMove = document.querySelector('#take-me-to');
-  buttonCityMove.addEventListener('click', function(event) {
-    this.moveMap([41.8781, -87.6298]);
-  }.bind(this));
-
-  //--------------------------------------------------------------------------
-  // This function waits for the locate me button to be clicked then uses the
-  // built in geolocation features of the browser to locate and move the map
-  // to the users location.
-  const whereAmI = document.querySelector('#where-am-i');
-  whereAmI.addEventListener('click', function(event) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-      this.moveMap([position.coords.latitude, position.coords.longitude]);
-    }.bind(this));
-  }.bind(this));
 }
 
 //-------------------------------------------------------------------------
