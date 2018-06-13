@@ -14,23 +14,27 @@ const makeRequest = function(url, callback) {
 
 const requestComplete = function() {
   if (this.status !== 200) return;
-  const contries = JSON.parse(this.response);
-    console.log(contries);
-    populateList(contries, contries);
+  const response = JSON.parse(this.response);
+    console.log(response);
+    populateList(response);
 }
 
-const populateList = function(contries, response) {
+const populateList = function(response) {
   const section = document.querySelector('#country-list');
   const selectBox = document.createElement('select');
   selectBox.classList.add('#select-country')
 
-  contries.forEach(function(country) {
+  response.forEach(function(country) {
     const option = document.createElement('option');
     option.textContent = `${country.name}`;
     selectBox.appendChild(option);
   })
   section.appendChild(selectBox);
 
+  displaySelectedOption(section, selectBox, response);
+}
+
+const displaySelectedOption = function (section, selectBox, response) {
   selectBox.addEventListener('change', function() {
     const ul = document.createElement('ul');
     const liCountryName = document.createElement('li');
